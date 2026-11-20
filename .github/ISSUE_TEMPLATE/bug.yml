@@ -3,6 +3,14 @@ description: A gate crashed, gave a wrong verdict, or the CLI misbehaved
 labels: ["bug"]
 body:
   - type: input
+    id: gate
+    attributes:
+      label: Gate
+      description: Which gate, or "cli" for the command line itself
+      placeholder: loudness
+    validations:
+      required: true
+  - type: input
     id: command
     attributes:
       label: Command you ran
@@ -13,6 +21,7 @@ body:
     id: output
     attributes:
       label: Output
+      description: The full output, including the exit code (`echo $?` or `$LASTEXITCODE`).
       render: text
     validations:
       required: true
@@ -20,11 +29,16 @@ body:
     id: expected
     attributes:
       label: What you expected
+      description: The verdict you expected and why. If a platform accepted or rejected the file, say which.
+    validations:
+      required: true
   - type: input
     id: versions
     attributes:
       label: Versions
       description: gatepack --version, python --version, ffmpeg -version (first line), operating system
+    validations:
+      required: true
   - type: markdown
     attributes:
-      value: Please do not attach files you have no right to share. A small sample that shows the problem is best.
+      value: Please do not attach files you have no right to share. A small sample that shows the problem is best; a few lines of code that create it are even better.

@@ -1,5 +1,8 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
+  - name: Question or idea
+    url: https://github.com/Essa366/gatepack/discussions
+    about: Ask how to use a gate, or discuss an idea before it becomes an issue.
   - name: Security problem
     url: https://github.com/Essa366/gatepack/security/advisories/new
     about: Report security issues privately.

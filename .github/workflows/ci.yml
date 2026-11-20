@@ -17,8 +17,8 @@ jobs:
         python: ["3.10", "3.13"]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
       - name: Install ffmpeg (Linux)
@@ -42,3 +42,44 @@ jobs:
         run: python -m pytest -q
       - name: CLI smoke test
         run: gatepack list
+
+  package:
+    # The sdist and wheel that a PyPI release would upload: build them and check the metadata.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Build sdist and wheel
+        run: |
+          python -m pip install build twine
+          python -m build
+      - name: Check package metadata
+        run: python -m twine check --strict dist/*
+      - name: Install the wheel and run the CLI
+        run: |
+          python -m pip install dist/*.whl
+          gatepack --version
+          gatepack list
+
+  one-gate-per-pr:
+    # CONTRIBUTING rule 1: a pull request adds at most one new gate module.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Count new gate modules
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          new=$(git diff --name-only --diff-filter=A "origin/$BASE_REF"...HEAD -- 'src/gatepack/gates/*.py' | grep -v '__init__.py' || true)
+          count=$(printf '%s' "$new" | grep -c . || true)
+          echo "new gate modules: $count"
+          echo "$new"
+          if [ "$count" -gt 1 ]; then
+            echo "::error::This pull request adds $count gates. Please open one pull request per gate (CONTRIBUTING.md, rule 1)."
+            exit 1
+          fi

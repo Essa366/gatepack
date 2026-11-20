@@ -4,19 +4,12 @@ Check a book file or a video before you publish it. Each gate is one rule set wi
 a PASS/WARN/FAIL verdict, JSON output and an exit code, so a person, a CI job or an AI agent can stop
 a bad upload before the platform does.
 
-```text
-$ gatepack check kdp-metadata book.json
-FAIL  kdp-metadata  book.json
-  FAIL  working-note: subtitle still contains a working note: "TODO"
-  WARN  trademark: title mentions "Minecraft" (the example trademark list); KDP disallows unauthorized references to trademarked terms [platform-rule]
-  FAIL  contact-info: description contains a URL, e-mail address or phone number [platform-rule]
-  result: FAIL (2 fail, 1 warn)
-  rule sources:
-    - KDP: Metadata Guidelines for Books: https://kdp.amazon.com/en_US/help/topic/G201097560
-```
+![Terminal: gatepack fails a KDP metadata file and a paperback cover with cited KDP rules, then passes an audio file at -14 LUFS](https://raw.githubusercontent.com/Essa366/gatepack/main/docs/demo.svg)
+
+<sub>Real output on this repository's test fixtures, made by [`scripts/make_demo_svg.py`](scripts/make_demo_svg.py). The `measured:` and `rule sources:` lines are left out of the picture to keep it readable.</sub>
 
 **Contributions welcome.** One gate = one pull request: a rule, its source, a PASS file and a FAIL file.
-[15 gates are waiting for an owner](docs/first-issues.md).
+[15 gates are waiting for an owner](https://github.com/Essa366/gatepack/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22), each with its rule source and test files described ([list](docs/first-issues.md)).
 
 ## Quick start
 

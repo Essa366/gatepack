@@ -44,7 +44,8 @@ run there. To work on one gate: `pytest -k my-gate`. Start a gate with `gatepack
 ERROR until you replace the TODO in `check()`. If your gate needs a new executable or Python module, list
 it in `requires=` (modules also go in `REQUIREMENT_MODULES` in `core.py`) so tests skip cleanly without it.
 
-Then open a pull request with the template filled in. CI runs the tests on Linux, macOS and Windows.
+Then open a pull request with the template filled in. CI runs the tests on Linux, macOS and Windows,
+builds the package, and fails if the pull request adds more than one gate module.
 
 Looking for something to start with? See [docs/first-issues.md](docs/first-issues.md) or the issues
 labelled `good first issue`.

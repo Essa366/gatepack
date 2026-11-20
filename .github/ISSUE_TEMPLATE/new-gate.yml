@@ -1,0 +1,70 @@
+name: New gate
+description: Propose a check that should run before something is published
+labels: ["new gate"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A gate reads a local file and says PASS, WARN or FAIL against a rule with a cited source.
+        Check the [open gate issues](https://github.com/Essa366/gatepack/issues?q=is%3Aissue+is%3Aopen+label%3A%22new+gate%22) first, so we do not build the same gate twice.
+  - type: input
+    id: gate_id
+    attributes:
+      label: Gate id
+      description: lowercase with dashes, e.g. youtube-thumbnail
+    validations:
+      required: true
+  - type: dropdown
+    id: family
+    attributes:
+      label: Family
+      options:
+        - kdp / books
+        - video / audio
+        - images
+        - other
+    validations:
+      required: true
+  - type: textarea
+    id: catches
+    attributes:
+      label: What would it catch?
+      description: The mistake, and what happens when it reaches the platform (rejection, takedown, refund, bad playback).
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Rule source URL
+      description: Link to the platform help page or the standard. If the threshold is your own judgment, write "heuristic" and why.
+    validations:
+      required: true
+  - type: textarea
+    id: rule_text
+    attributes:
+      label: The rule, quoted
+      description: Copy the sentence or numbers from the source page, so a reviewer can compare without hunting.
+    validations:
+      required: true
+  - type: textarea
+    id: pass_fixture
+    attributes:
+      label: PASS fixture
+      description: A small file that must PASS, and how to make it (ideally a few lines for scripts/make_fixtures.py). No real customer files.
+    validations:
+      required: true
+  - type: textarea
+    id: fail_fixture
+    attributes:
+      label: FAIL fixture
+      description: A small file that must FAIL, and which rule it breaks.
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: The gate reads local files only (no login, scraping, upload or publishing, no network calls)
+          required: true
+        - label: I would like to build this gate myself
