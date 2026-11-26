@@ -249,7 +249,29 @@ def media() -> None:
     ff(put("freeze", "fail", "still_frame_4s.mp4"), "-f", "lavfi", "-i", "color=c=gray:s=64x64:r=10:d=4", *vid)
 
 
-GROUPS = {"metadata": metadata, "pagecount": pagecount, "covers": covers, "epub": epubs, "media": media}
+def subtitles():
+    for ext in ("srt", "vtt"):
+        cues = []
+        for i in range(3):
+            timing = f"00:00:0{i}.000 --> 00:00:0{i+1}.000"
+            if ext == "srt":
+                timing = f"{i+1}\n" + timing.replace(".", ",")
+            cues.append(timing + "\nCaption")
+        body = "\n\n".join(cues) + "\n"
+        if ext == "vtt":
+            put("subtitles", "fail", "missing_header.vtt", body)
+            body = "WEBVTT\n\n" + body
+        else:
+            put("subtitles", "fail", "overlap.srt", body.replace("01,000 -->", "00,500 -->"),
+                args={"overlaps": "reject"})
+        put("subtitles", "pass", "three." + ext, body)
+    put("subtitles", "pass", "layered.vtt", "WEBVTT\n\n00:00.000 --> 00:02.000\nA\n\n00:01.000 --> 00:03.000\nB\n")
+    put("subtitles", "warn", "long_line.vtt", "WEBVTT\n\n00:00.000 --> 00:02.000\nCaption\n",
+        args={"max_line_length": 5})
+    put("subtitles", "fail", "reversed.vtt", "WEBVTT\n\n00:02.000 --> 00:01.500\nText\n")
+
+
+GROUPS = {"subtitles": subtitles, "metadata": metadata, "pagecount": pagecount, "covers": covers, "epub": epubs, "media": media}
 
 if __name__ == "__main__":
     chosen = sys.argv[1:] or list(GROUPS)

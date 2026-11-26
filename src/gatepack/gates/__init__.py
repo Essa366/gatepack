@@ -14,6 +14,7 @@ GATE_MODULES = (
     "freeze",
     "loudness",
     "tail",
+    "subtitles",
 )
 
 
